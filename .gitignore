@@ -27,7 +27,6 @@ logs/
 *.out
 
 # Data files
-*.csv
 *.tsv
 *.data
 *.dat
