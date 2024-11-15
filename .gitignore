@@ -1,0 +1,60 @@
+# Python bytecode and cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment files
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Model weights and checkpoints
+*.pt
+*.pth
+*.h5
+*.ckpt
+
+# Log files and TensorBoard logs
+*.log
+logs/
+*.out
+
+# Data files
+*.csv
+*.tsv
+*.data
+*.dat
+*.pkl
+*.hdf5
+*.npz
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# System-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Compiled output
+build/
+dist/
+*.egg-info/
+
+# Other common file types
+*.swp
+*.lock
