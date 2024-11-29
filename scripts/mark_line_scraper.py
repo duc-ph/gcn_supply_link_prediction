@@ -15,7 +15,6 @@ driver = webdriver.Chrome(service=service, options=options)
 driver.get('https://www.marklines.com/en/members/login')
 
 
-#driver.find_element("xpath", '/html/body/div[2]/div[1]/div/div/div/div[3]/div[2]/div/div[2]/div[1]/a/span').click()
 time.sleep(2)#wait
 
 #input id
@@ -32,9 +31,10 @@ driver.execute_script("window.scrollTo(19, 1427)")
 
 time.sleep(2) #wait
 
+#click the "Supplier Database" button
 driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[1]/ul/li[10]/ul/a[1]/li/span').click()
 
-
+#scroll to search bar
 driver.execute_script("window.scrollTo(200, 1427)")
 
 #suppliers to check out (starting, will add more as we find more)
@@ -42,21 +42,23 @@ nodes_to_check = ['Volvo']
 
 #navigate to search bar, make it an exact match, enter the first supplier to search, press enter to search
 time.sleep(3)#wait
+#click "exact match" button
 driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div/div/div/div[5]/form/div/div/label[2]/input').click()
 time.sleep(1)
+#write the first node(customer) to search for in the search field
 driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div/div/div/div[5]/form/input').send_keys(nodes_to_check[0])
 time.sleep(1)
+#press enter to start the search
 driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div/div/div/div[5]/form/input').send_keys(Keys.RETURN)
-#driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[1]/ul/li[10]/ul/a[1]/li/span').click()
 time.sleep(2)#wait
 
 
-nodes_checked = []
-current_supplier = ''
-nodes = []
+nodes_checked = [] #the nodes we have already searched for
+current_supplier = '' #the current supplier we are searching as a customer
+nodes = [] #all of the nodes we find
 
 try:
-    while len(nodes_to_check) > 0:
+    while len(nodes_to_check) > 0: #while there are still more nodes to search for
         if len(nodes_checked) == 0: #we are on the first supplier
             #move to checked and set current
             current_supplier = nodes_to_check[0]
@@ -69,13 +71,17 @@ try:
             del nodes_to_check[0]
             nodes_checked.append(current_supplier)
 
+            #scroll to the search bar so it is in view
             search_input_elm = driver.find_element("xpath", '/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div/div/div/div[3]/section[1]/div[3]/form/input')
             driver.execute_script("window.scrollTo(0, 0)")
             time.sleep(1)
             driver.execute_script(f"window.scrollTo({search_input_elm.location['x']}, {search_input_elm.location['y']})")
             time.sleep(1)
+            #clear the search term
             search_input_elm.clear()
+            #enter the new supplier name
             search_input_elm.send_keys(current_supplier)
+            #search for the supplier
             search_input_elm.send_keys(Keys.RETURN)
             time.sleep(2)
             
@@ -87,7 +93,7 @@ try:
                 driver.execute_script("window.scrollTo(0, 0)")
                 time.sleep(1)
                 print('next page')
-                for supplier in driver.find_elements(By.CLASS_NAME,'supplier_name'):
+                for supplier in driver.find_elements(By.CLASS_NAME,'supplier_name'): #go through every supplier in the current page
                     supplier_root = supplier.text.split(' ')
                     #the root is the first two words, unless the name is only one word or 
                     #if the second word has a '(', which means that it is something like '(usa office)' and is unneeded
@@ -101,16 +107,18 @@ try:
                             nodes_to_check.append(supplier_root)
                             #print(supplier.text)
                 
-                #check if there are more pages
+                #check if there are more pages (searching for a '›' symbol)
                 try:
                     found = False
-                    for page_item in driver.find_elements(By.CLASS_NAME,'page-link'):
+                    for page_item in driver.find_elements(By.CLASS_NAME,'page-link'): #go through every symbol in the buttons at bottom of page
                         #print(page_item.text)
                         #print(page_item.get_attribute('href'))
-                        if page_item.text == '›':
+                        if page_item.text == '›': #we found the next page button!
                             found = True
+                            #scroll to the button
                             driver.execute_script(f"window.scrollTo({page_item.location['x']}, {page_item.location['y']})")
                             time.sleep(1)
+                            #click it
                             page_item.click()
                             
                             
@@ -131,6 +139,7 @@ except:
 
 print("saving to csv")
 
+#save found edges to a csv
 with open('nodes.csv','w', encoding="utf-8") as f:
     writer=csv.writer(f, delimiter=' ',lineterminator='\n',)
     for node in nodes:
@@ -139,4 +148,5 @@ with open('nodes.csv','w', encoding="utf-8") as f:
 
 print('DONE')
 
+#close driver
 driver.quit()
