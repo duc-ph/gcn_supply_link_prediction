@@ -1,3 +1,5 @@
+#All Completed By Tom
+
 ## import dependencies
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
