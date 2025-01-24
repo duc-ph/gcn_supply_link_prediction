@@ -3,4 +3,4 @@ This is the implementation of the paper [A machine learning approach for predict
 
 This is the final project for the course **CS276 - Machine Learning on Graphs** at SJSU.
 
-Detail of the project can be found [here](https://docs.google.com/document/d/1XZpnaoYcx5tleXY7JkmVmykza6eXjMPIHtvN8BqAt1E/edit?tab=t.0)
+Detail of the project can be found [here](https://docs.google.com/document/d/1XZpnaoYcx5tleXY7JkmVmykza6eXjMPIHtvN8BqAt1E/edit?tab=t.0).
